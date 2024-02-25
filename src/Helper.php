@@ -41,7 +41,6 @@ class Helper
     public static function processJobData($ad, $newArray)
     {
         $flattenedArray = Helper::flattenArray($ad);
-
         $flattenedArray['description'] = Helper::truncateText(strip_tags(str_ireplace("\n", '', $flattenedArray['description'])));
         $rename = Helper::renameKeys($flattenedArray, $newArray);
 
@@ -185,11 +184,15 @@ class Helper
             if (is_array($value)) {
                 // Если значение является массивом, преобразуем его в строку ключ=значение
                 foreach ($value as $subKey => $subValue) {
-                    $pairs[] = urlencode($key . '[' . $subKey . ']') . '=' . urlencode($subValue);
+                    if (isset($key, $subKey, $subValue)) {
+                        $pairs[] = urlencode($key . '[' . $subKey . ']') . '=' . urlencode($subValue);
+                    }
                 }
             } else {
-                // Если значение не является массивом, просто добавляем его в виде ключ=значение
-                $pairs[] = urlencode($key) . '=' . urlencode($value);
+                // Если значение не является массивом, просто добавляем его в виде ключа=значение
+                if (isset($key, $value)) {
+                    $pairs[] = urlencode($key) . '=' . urlencode($value);
+                }
             }
         }
         // Собираем все пары ключ=значение в одну строку, разделенную символом "&"
@@ -197,7 +200,12 @@ class Helper
     }
 
 
+
     public static function stringToArray($string) {
+        if (!is_string($string)) {
+            // Обработка ошибки, например, можно вернуть пустой массив
+            return [];
+        }
         $array = [];
         $pairs = explode('&', $string);
         foreach ($pairs as $pair) {
