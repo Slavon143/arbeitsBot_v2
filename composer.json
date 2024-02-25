@@ -1,0 +1,11 @@
+{
+    "autoload": {
+        "psr-4": {
+            "src\\": "src"
+        }
+    },
+    "require": {
+        "nutgram/nutgram": "^3.20",
+        "symfony/dotenv": "^6.4"
+    }
+}
