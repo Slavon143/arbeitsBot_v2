@@ -38,29 +38,38 @@ class ArbeitsTelegramBot
             }else{
                 $messageText = $bot->message()->text;
 
-                switch ($messageText){
-                    case '🏠 ' . $this->settingArray->btnNawTranslate[$language]['startTitle']:
-                        $this->db->removeHistoryFile($bot->chatId());
-                        $this->menu->startMenu($language);
-                        break;
-                    case $this->settingArray->arrSettingStartMenuRegion[$language]['title']:
-                        $this->menu->showRegion([]);
-                        break;
-                    case $this->settingArray->arrSettingStartMenuOccupation[$language]['title']:
-                        $this->menu->platsbankenShowOccupation([]);
-                        break;
-                    case '🔙 ' . $this->settingArray->btnNawTranslate[$language]['startBack']:
-                        $previousAction = $this->db->getPreviousAction($bot->chatId());
-                        $previousAction['message_id'] = $bot->message()->message_id;
-                        call_user_func([$this->menu, $previousAction['f']], $previousAction);
-                        $this->db->removeLastAction($bot->chatId());
-                        break;
-                    case '🌐 ' . $this->settingArray->btnNawTranslate[$language]['startLanguage']:
-                        $this->menu->sendLanguageMenu();
-                        break;
-                    default:
-                        $this->menu->showResult(['se_t' => $messageText]);
-                        break;
+                if (strpos($messageText, '/suggest') === 0) {
+                    $suggestionText = str_replace('/suggest', '', $messageText);
+                    $suggestionText = trim($suggestionText);
+                    $this->menu->sendMeMessage($suggestionText);
+                }else{
+                    switch ($messageText){
+                        case '🏠 ' . $this->settingArray->btnNawTranslate[$language]['startTitle']:
+                            $this->db->removeHistoryFile($bot->chatId());
+                            $this->menu->startMenu($language);
+                            break;
+                        case $this->settingArray->arrSettingStartMenuRegion[$language]['title']:
+                            $this->menu->showRegion([]);
+                            break;
+                        case $this->settingArray->arrSettingStartMenuOccupation[$language]['title']:
+                            $this->menu->platsbankenShowOccupation([]);
+                            break;
+                        case '🔙 ' . $this->settingArray->btnNawTranslate[$language]['startBack']:
+                            $previousAction = $this->db->getPreviousAction($bot->chatId());
+                            $previousAction['message_id'] = $bot->message()->message_id;
+                            call_user_func([$this->menu, $previousAction['f']], $previousAction);
+                            $this->db->removeLastAction($bot->chatId());
+                            break;
+                        case '🌐 ' . $this->settingArray->btnNawTranslate[$language]['startLanguage']:
+                            $this->menu->sendLanguageMenu();
+                            break;
+                        case '/help':
+                            $this->menu->menuHelp();
+                            break;
+                        default:
+                            $this->menu->showResult(['se_t' => $messageText]);
+                            break;
+                    }
                 }
             }
         });

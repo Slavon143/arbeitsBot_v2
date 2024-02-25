@@ -503,19 +503,15 @@ class ArbeitsBotMenu
 
     public function menuHelp()
     {
-        $this->telegram->sendMessage([
-            'chat_id' => $this->chat_id,
+        $language = $this->db->getLanguageChoices($this->telegram->chatId());
+        $this->telegram->sendMessage('',[
+            'text' => $this->settingArray->arrSuggestSetting[$language]['suggestMessage'],
             'parse_mode' => 'HTML',
-            'text' => $this->settingArray->arrSuggestSetting[$this->language]['suggestMessage'],
         ]);
     }
 
-    public function sendMeMessage($message)
+    public function sendMeMessage()
     {
-        $this->telegram->sendMessage([
-            'chat_id' => $_ENV['MY_CHAT_ID'],
-            'text' => $message . ' ChatId ' . $this->chat_id,
-        ]);
-        die();
+        $this->telegram->forwardMessage($this->telegram->chatId(),$_ENV['MY_CHAT_ID'],$this->telegram->messageId());
     }
 }
