@@ -37,10 +37,11 @@ class ArbeitsTelegramBot
                 $this->menu->sendLanguageMenu();
             }else{
                 $messageText = $bot->message()->text;
+
                 switch ($messageText){
                     case '🏠 ' . $this->settingArray->btnNawTranslate[$language]['startTitle']:
                         $this->db->removeHistoryFile($bot->chatId());
-                        $this->menu->startMenu('ru');
+                        $this->menu->startMenu($language);
                         break;
                     case $this->settingArray->arrSettingStartMenuRegion[$language]['title']:
                         $this->menu->showRegion([]);
