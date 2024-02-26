@@ -45,6 +45,18 @@ class ActionHandler {
         $stmt->execute();
     }
 
+    public function removeResource($chatId) {
+        $stmt = $this->db->prepare('DELETE FROM user_resource WHERE chat_id = :chatId');
+        $stmt->bindValue(':chatId', $chatId, SQLITE3_TEXT);
+        $stmt->execute();
+    }
+
+    public function removeLanguage($chatId) {
+        $stmt = $this->db->prepare('DELETE FROM user_languages WHERE chat_id = :chatId');
+        $stmt->bindValue(':chatId', $chatId, SQLITE3_TEXT);
+        $stmt->execute();
+    }
+
     public function removeLastAction($chatId) {
         $this->db->exec('DELETE FROM history WHERE ROWID = (SELECT MAX(ROWID) FROM history WHERE chat_id = "'.$chatId.'")');
     }
@@ -77,6 +89,24 @@ class ActionHandler {
         $row = $result->fetchArray(SQLITE3_ASSOC);
         return ($row !== false) ? $row['lang'] : null;
     }
+
+    public function removeOldRecords($days = 7) {
+        // Определяем временную метку, старше которой нужно удалить записи
+        $timestampToDelete = date('Y-m-d H:i:s', strtotime("-$days days"));
+
+        // Получаем chatId из записей, старше указанной временной метки
+        $stmtSelect = $this->db->prepare('SELECT DISTINCT chat_id FROM history WHERE timestamp < :timestamp');
+        $stmtSelect->bindValue(':timestamp', $timestampToDelete, SQLITE3_TEXT); // Используем SQLITE3_TEXT для строкового значения
+        $result = $stmtSelect->execute();
+
+        // Получаем массив chatId
+        $chatIds = [];
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $chatIds[] = $row['chat_id'];
+        }
+        return $chatIds;
+    }
+
 
     // Метод закрытия соединения с базой данных
     public function close() {

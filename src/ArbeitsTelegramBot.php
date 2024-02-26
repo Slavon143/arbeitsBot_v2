@@ -13,7 +13,6 @@ class ArbeitsTelegramBot
     protected $menu;
     protected $settingArray;
     protected $db;
-    protected $language;
 
     public function __construct()
     {
@@ -37,11 +36,8 @@ class ArbeitsTelegramBot
                 $this->menu->sendLanguageMenu();
             }else{
                 $messageText = $bot->message()->text;
-
                 if (strpos($messageText, '/suggest') === 0) {
-                    $suggestionText = str_replace('/suggest', '', $messageText);
-                    $suggestionText = trim($suggestionText);
-                    $this->menu->sendMeMessage($suggestionText);
+                    $this->menu->sendMeMessage();
                 }else{
                     switch ($messageText){
                         case '🏠 ' . $this->settingArray->btnNawTranslate[$language]['startTitle']:
@@ -106,6 +102,7 @@ class ArbeitsTelegramBot
             } catch (\Exception $e) {
                 // Обработка других исключений, если необходимо
                 echo 'Произошла другая ошибка: ' . $e->getMessage() . PHP_EOL;
+                $this->menu->startMenu('ru');
             }
         }
 
