@@ -28,8 +28,3 @@ class Logger {
         }
     }
 }
-
-// Пример использования
-$log_file = 'app.log'; // Путь к файлу лога
-$logger = new Logger($log_file);
-$logger->log('Сообщение для лога');
