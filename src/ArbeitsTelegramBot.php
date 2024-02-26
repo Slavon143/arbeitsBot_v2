@@ -28,10 +28,9 @@ class ArbeitsTelegramBot
 
     public function listen()
     {
-
         $this->telegram->onMessage(function (Nutgram $bot) {
-
             $language = $this->db->getLanguageChoices($bot->chatId());
+            Helper::debug($language);
             if (!$language){
                 $this->menu->sendLanguageMenu();
             }else{
@@ -42,7 +41,7 @@ class ArbeitsTelegramBot
                     switch ($messageText){
                         case '🏠 ' . $this->settingArray->btnNawTranslate[$language]['startTitle']:
                             $this->db->removeHistoryFile($bot->chatId());
-                            $this->menu->startMenu($language);
+                            $this->menu->startMenu(['lang'=>$language]);
                             break;
                         case $this->settingArray->arrSettingStartMenuRegion[$language]['title']:
                             $this->menu->showRegion([]);
@@ -52,9 +51,11 @@ class ArbeitsTelegramBot
                             break;
                         case '🔙 ' . $this->settingArray->btnNawTranslate[$language]['startBack']:
                             $previousAction = $this->db->getPreviousAction($bot->chatId());
-                            $previousAction['message_id'] = $bot->message()->message_id;
-                            call_user_func([$this->menu, $previousAction['f']], $previousAction);
-                            $this->db->removeLastAction($bot->chatId());
+                            if (isset($previousAction['f'])){
+                                $previousAction['message_id'] = $bot->message()->message_id;
+                                call_user_func([$this->menu, $previousAction['f']], $previousAction);
+                                $this->db->removeLastAction($bot->chatId());
+                            }
                             break;
                         case '🌐 ' . $this->settingArray->btnNawTranslate[$language]['startLanguage']:
                             $this->menu->sendLanguageMenu();
@@ -69,16 +70,14 @@ class ArbeitsTelegramBot
                 }
             }
         });
-
         $this->telegram->onCallbackQuery(function (Nutgram $bot){
             $data = $bot->callbackQuery()->data;
-
             if (isset(Helper::stringToArray($data)['lang'])) {
                 $data = Helper::stringToArray($data);
+                $this->db->addToHistory($bot->chatId(), $data);
                 $this->db->recordLanguageChoice($bot->chatId(),$data['lang']);
-                $this->menu->startMenu($data['lang']);
+                $this->menu->startMenu(['lang'=>$data['lang']]);
             }
-
             if (Helper::stringToArray($data)){
                 $data = Helper::stringToArray($data);
 
@@ -88,7 +87,6 @@ class ArbeitsTelegramBot
                 $data['message_id'] = $this->telegram->message()->message_id;
                 call_user_func([$this->menu, $methodName], $data);
             }
-
         });
 
         while (true) {
@@ -102,11 +100,8 @@ class ArbeitsTelegramBot
             } catch (\Exception $e) {
                 // Обработка других исключений, если необходимо
                 echo 'Произошла другая ошибка: ' . $e->getMessage() . PHP_EOL;
-                $this->menu->startMenu('ru');
+                $this->menu->startMenu(['lang'=>'ru']);
             }
         }
-
-
     }
-
 }
