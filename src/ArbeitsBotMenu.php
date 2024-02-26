@@ -374,7 +374,7 @@ class ArbeitsBotMenu
             // Создаем текст сообщения
             $messageText = "<b>$title</b>\n$additionalInfo";
 
-            $flag_unicode = Helper::getFlag($this->language);
+            $flag_unicode = Helper::getFlag($language);
 
             $menu = [
                 [
