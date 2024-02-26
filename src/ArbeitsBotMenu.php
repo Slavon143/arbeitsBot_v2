@@ -80,7 +80,7 @@ class ArbeitsBotMenu
         if (!empty($current_row)) {
             $buttons[] = $current_row;
         }
-        $this->telegram->sendMessage(' 📍 ' . '<b>' . $tramslateText['title'] . '</b>', [
+        $this->telegram->sendMessage('<b>' . $tramslateText['title'] . '</b>', [
             'reply_markup' => json_encode([
                 'inline_keyboard' => $buttons
             ]),
@@ -119,7 +119,7 @@ class ArbeitsBotMenu
             $buttons[] = $current_row;
         }
         $buttons[] = [['text' => $this->settingArray->arrSettingStartMenuCity[$language]['btnShowAll'], 'callback_data' => Helper::arrayToString(['f' => 'platsbankenShowOccupation', 'r_id' => $region_id])]];
-        $this->telegram->sendMessage('🏰 ' . '<b>' . $tramslateText['title'] . '</b>', [
+        $this->telegram->sendMessage('<b>' . $tramslateText['title'] . '</b>', [
             'reply_markup' => json_encode([
                 'inline_keyboard' => $buttons
             ]),
