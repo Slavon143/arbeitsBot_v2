@@ -396,7 +396,7 @@ class ArbeitsBotMenu
         }
     }
 
-    public function delMessage($param)
+    public function delMessage()
     {
         $this->telegram->message()->delete();
     }
@@ -473,8 +473,6 @@ class ArbeitsBotMenu
 
     public function nawMenu($lang)
     {
-
-        $language = '';
         if ($lang) {
             $language = $lang;
         } else {
