@@ -41,9 +41,10 @@ class Helper
     public static function processJobData($ad, $newArray)
     {
         $flattenedArray = Helper::flattenArray($ad);
-        $flattenedArray['description'] = Helper::truncateText(strip_tags(str_ireplace("\n", '', $flattenedArray['description'])));
+        if (isset($flattenedArray['description'])){
+            $flattenedArray['description'] = Helper::truncateText(strip_tags(str_ireplace("\n", '', $flattenedArray['description'])));
+        }
         $rename = Helper::renameKeys($flattenedArray, $newArray);
-
         $str = '';
         foreach ($rename as $key => $item) {
             $str .= '<b>' . $key . '</b>' . ': ' . $item . "\n";
