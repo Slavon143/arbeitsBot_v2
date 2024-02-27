@@ -510,8 +510,8 @@ class ArbeitsBotMenu
         ]);
     }
 
-    public function sendMeMessage()
+    public function sendMeMessage($messageText)
     {
-        $this->telegram->forwardMessage($this->telegram->chatId(),$_ENV['MY_CHAT_ID'],$this->telegram->messageId());
+        $this->telegram->sendMessage($messageText,['chat_id' => $_ENV['MY_CHAT_ID']]);
     }
 }

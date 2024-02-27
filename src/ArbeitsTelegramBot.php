@@ -37,7 +37,7 @@ class ArbeitsTelegramBot
                 }else{
                     $messageText = $bot->message()->text;
                     if (strpos($messageText, '/suggest') === 0) {
-                        $this->menu->sendMeMessage();
+                        $this->menu->sendMeMessage($messageText);
                     }else{
                         switch ($messageText){
                             case '🏠 ' . $this->settingArray->btnNawTranslate[$language]['startTitle']:
