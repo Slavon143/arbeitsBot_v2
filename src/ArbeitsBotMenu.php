@@ -294,7 +294,7 @@ class ArbeitsBotMenu
             $location['se_t'] = $param['se_t'];
         }
 
-        $resource = $this->db->getResourceChoices($this->chat_id);
+        $resource = $this->db->getResourceChoices($this->telegram->chatId());
 
         if (!$resource) {
             $resource = 'pb';

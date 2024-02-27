@@ -71,6 +71,7 @@ class ApiArbetsformedlingen
         }else{
             $request = $this->makeApiRequest($this->platsbanken_api_url."job/$resource/$id");
         }
+
         $request = json_decode($request,true);
 
         return $request;
