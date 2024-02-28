@@ -1,6 +1,7 @@
 vendor
 .idea
 composer.lock
-.envgit
+.env
+db/database.db
 /histories
 /logs
