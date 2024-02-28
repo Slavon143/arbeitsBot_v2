@@ -25,6 +25,7 @@ class ArbeitsTelegramBot
         $this->menu = new ArbeitsBotMenu($this->telegram,$this->db);
         $this->settingArray = new SettingsClass();
         $this->logger = new Logger(__DIR__ . '/../logs/logfile.txt');
+        $this->telegram->deleteWebhook();
     }
 
     public function listen()
