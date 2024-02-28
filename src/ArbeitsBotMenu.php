@@ -26,8 +26,6 @@ class ArbeitsBotMenu
 
     public function startMenu($lang)
     {
-
-        $this->telegram->sendMessage("https://greewepi.net/4/7147827",[ 'parse_mode' => 'HTML']);
         $language = $this->db->getLanguageChoices($this->telegram->chatId());
         if ($lang['lang']) {
             $tramslateText = $this->settingArray->arrSettingStartMenu[$lang['lang']];
