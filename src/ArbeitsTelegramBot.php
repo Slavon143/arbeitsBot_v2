@@ -41,6 +41,7 @@ class ArbeitsTelegramBot
                         $this->menu->sendMeMessage($messageText);
                     }else{
                         switch ($messageText){
+                            case '/start':
                             case '🏠 ' . $this->settingArray->btnNawTranslate[$language]['startTitle']:
                                 $this->db->removeHistoryFile($bot->chatId());
                                 $this->menu->startMenu(['lang'=>$language]);
@@ -108,7 +109,7 @@ class ArbeitsTelegramBot
                 echo $errorMessage . PHP_EOL;
                 $this->logger->log($errorMessage);
                 $this->menu->sendMeMessage($errorMessage);
-//                $this->menu->startMenu(['lang' => 'ru']);
+                $this->menu->startMenu(['lang' => 'ru']);
                 sleep(10);
             }
         }

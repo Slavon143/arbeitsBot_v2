@@ -479,7 +479,9 @@ class ArbeitsBotMenu
             $language = $this->db->getLanguageChoices($this->telegram->chatId());
         }
 
-        $this->telegram->sendMessage(' ...', [
+
+
+        $this->telegram->sendMessage($this->settingArray->arrStartPrewiev[$language]['prew'], [
             'reply_markup' => json_encode([
                 'keyboard' => [
                     [
@@ -495,7 +497,8 @@ class ArbeitsBotMenu
                 ],
                 'resize_keyboard' => true,
                 'one_time_keyboard' => false
-            ])
+            ]),
+            'parse_mode' => 'HTML'
         ]);
     }
 
