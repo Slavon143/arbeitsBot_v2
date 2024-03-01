@@ -98,17 +98,17 @@ class ArbeitsTelegramBot
     }
 
     public function start(){
+        $this->telegram->deleteWebhook();
+        $this->listen();
         while (true) {
             try {
-                $this->telegram->deleteWebhook();
-                $this->listen();
                 $this->telegram->run();
             } catch (\Exception $e) {
                 $errorMessage = 'Произошла другая ошибка: ' . $e->getMessage();
                 echo $errorMessage . PHP_EOL;
                 $this->logger->log($errorMessage);
                 $this->menu->sendMeMessage($errorMessage);
-                $this->menu->startMenu(['lang' => 'ru']);
+//                $this->menu->startMenu(['lang' => 'ru']);
                 sleep(10);
             }
         }
