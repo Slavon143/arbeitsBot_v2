@@ -31,7 +31,7 @@ class ArbeitsBotMenu
         } else {
             $tramslateText = $this->settingArray->arrSettingStartMenu[$this->language];
         }
-
+        $this->prewMessage();
         $this->telegram->sendMessage('<b>' . $tramslateText['title'] . '</b>', [
 
             'reply_markup' => json_encode([
@@ -268,7 +268,6 @@ class ArbeitsBotMenu
         ]);
     }
 
-
     public function showResult($param)
     {
         $language = $this->db->getLanguageChoices($this->telegram->chatId());
@@ -290,13 +289,10 @@ class ArbeitsBotMenu
             $param['se_t'] = strip_tags($param['se_t']);
             $location['se_t'] = $param['se_t'];
         }
-
         $resource = $this->db->getResourceChoices($this->telegram->chatId());
-
         if (!$resource) {
             $resource = 'pb';
         }
-
         $tramslateText = $this->settingArray->arrSettingStartMenuResult[$language];
 
         if (isset($param['st_index'])) {
@@ -468,9 +464,10 @@ class ArbeitsBotMenu
         ]);
     }
 
-    public function prewMessage(){
+    public function prewMessage()
+    {
         $language = $this->db->getLanguageChoices($this->telegram->chatId());
-        $this->telegram->sendMessage($this->settingArray->arrStartPrewiev[$language]['prew'],['parse_mode' => 'HTML']);
+        $this->telegram->sendMessage($this->settingArray->arrStartPrewiev[$language]['prew'], ['parse_mode' => 'HTML']);
     }
 
     public function nawMenu($lang)
@@ -505,7 +502,7 @@ class ArbeitsBotMenu
     public function menuHelp()
     {
         $language = $this->db->getLanguageChoices($this->telegram->chatId());
-        $this->telegram->sendMessage('',[
+        $this->telegram->sendMessage('', [
             'text' => $this->settingArray->arrSuggestSetting[$language]['suggestMessage'],
             'parse_mode' => 'HTML',
         ]);
@@ -513,6 +510,6 @@ class ArbeitsBotMenu
 
     public function sendMeMessage($messageText)
     {
-        $this->telegram->sendMessage($messageText,['chat_id' => $_ENV['MY_CHAT_ID']]);
+        $this->telegram->sendMessage($messageText, ['chat_id' => $_ENV['MY_CHAT_ID']]);
     }
 }
