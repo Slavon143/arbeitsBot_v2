@@ -95,21 +95,21 @@ class ArbeitsTelegramBot
                 $this->logger->log('Error in onMessage: ' . $e->getMessage());
             }
         });
+    }
+
+    public function start(){
         while (true) {
             try {
+                $this->telegram->deleteWebhook();
+                $this->listen();
                 $this->telegram->run();
-            } catch (\GuzzleHttp\Exception\ConnectException $e) {
-                // Обработка ошибки соединения
-                $errorMessage = 'Произошла ошибка соединения: ' . $e->getMessage();
-                echo $errorMessage . PHP_EOL;
-                $this->logger->log($errorMessage);
-                sleep(10);
             } catch (\Exception $e) {
-                // Обработка других исключений, если необходимо
                 $errorMessage = 'Произошла другая ошибка: ' . $e->getMessage();
                 echo $errorMessage . PHP_EOL;
                 $this->logger->log($errorMessage);
+                $this->menu->sendMeMessage($errorMessage);
                 $this->menu->startMenu(['lang' => 'ru']);
+                sleep(10);
             }
         }
     }
