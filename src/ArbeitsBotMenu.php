@@ -26,14 +26,11 @@ class ArbeitsBotMenu
 
     public function startMenu($lang)
     {
-        $language = $this->db->getLanguageChoices($this->telegram->chatId());
         if ($lang['lang']) {
             $tramslateText = $this->settingArray->arrSettingStartMenu[$lang['lang']];
         } else {
-            $tramslateText = $this->settingArray->arrSettingStartMenu[$language];
+            $tramslateText = $this->settingArray->arrSettingStartMenu[$this->language];
         }
-
-        $this->nawMenu($lang['lang']);
 
         $this->telegram->sendMessage('<b>' . $tramslateText['title'] . '</b>', [
 
@@ -471,6 +468,11 @@ class ArbeitsBotMenu
         ]);
     }
 
+    public function prewMessage(){
+        $language = $this->db->getLanguageChoices($this->telegram->chatId());
+        $this->telegram->sendMessage($this->settingArray->arrStartPrewiev[$language]['prew'],['parse_mode' => 'HTML']);
+    }
+
     public function nawMenu($lang)
     {
         if ($lang) {
@@ -479,9 +481,7 @@ class ArbeitsBotMenu
             $language = $this->db->getLanguageChoices($this->telegram->chatId());
         }
 
-
-
-        $this->telegram->sendMessage($this->settingArray->arrStartPrewiev[$language]['prew'], [
+        $this->telegram->sendMessage('...', [
             'reply_markup' => json_encode([
                 'keyboard' => [
                     [
