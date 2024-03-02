@@ -14,25 +14,12 @@ class Helper
         return $truncatedText;
     }
 
-    public static function flattenArray($array, $prefix = '')
-    {
-        $result = [];
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $result = array_merge($result, self::flattenArray($value, $prefix . $key . '_'));
-            } elseif (!empty($value)) {
-                $result[$prefix . $key] = $value;
-            }
-        }
-        return $result;
-    }
-
     public static function renameKeys($array, $renameArray)
     {
         $result = [];
-        foreach ($renameArray as $oldKey => $newKey) {
-            if (isset($array[$oldKey])) {
-                $result[$newKey] = $array[$oldKey];
+        foreach ($array as $key=>$value){
+            if (isset($renameArray[$key])){
+                $result[$renameArray[$key]] = $value;
             }
         }
         return $result;
@@ -40,17 +27,57 @@ class Helper
 
     public static function processJobData($ad, $newArray)
     {
-        $flattenedArray = Helper::flattenArray($ad);
+        $flattenedArray = Helper::flattenArrayNew($ad);
+
         if (isset($flattenedArray['description'])){
             $flattenedArray['description'] = Helper::truncateText(strip_tags(str_ireplace("\n", '', $flattenedArray['description'])));
         }
+
+        if (isset($flattenedArray['published date'])){
+            $dateTime = new \DateTime($flattenedArray['published date']);
+            $formattedDate = $dateTime->format("d F Y, H:i:s");
+            $flattenedArray['published date'] = $formattedDate;
+        }
+
+        if (isset($flattenedArray['last application date'])){
+            $dateTime = new \DateTime($flattenedArray['last application date']);
+            $formattedDate = $dateTime->format("d F Y, H:i:s");
+            $flattenedArray['last application date'] = $formattedDate;
+        }
+
+        if (isset($flattenedArray['expiration date'])){
+            $dateTime = new \DateTime($flattenedArray['expiration date']);
+            $formattedDate = $dateTime->format("d F Y, H:i:s");
+            $flattenedArray['expiration date'] = $formattedDate;
+        }
+
         $rename = Helper::renameKeys($flattenedArray, $newArray);
+
         $str = '';
         foreach ($rename as $key => $item) {
             $str .= '<b>' . $key . '</b>' . ':^' . $item . "\n";
         }
         return $str;
     }
+
+    public static function flattenArrayNew($array, $prefix = '') {
+        $result = [];
+        foreach ($array as $key => $value) {
+            $snakeKey = $prefix . strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
+            $snakeKeyWithSpaces = str_replace('_', ' ', $snakeKey);
+
+            if (is_array($value)) {
+                $result = array_merge($result, self::flattenArrayNew($value, $snakeKey . '_'));
+            } elseif (!empty($value) || $value === 0 || $value === '0') {
+                $decodedValue = is_string($value) ? html_entity_decode($value) : $value;
+                $formattedValue = is_string($decodedValue) ? strip_tags($decodedValue) : $decodedValue;
+                $formattedValue = str_replace(["\r", "\n", "\t","    "], ' ', $formattedValue);
+                $result[$snakeKeyWithSpaces] = $formattedValue;
+            }
+        }
+        return $result;
+    }
+
 
     public static function debug($data)
     {
@@ -82,10 +109,8 @@ class Helper
                     'id' => $value[1]
                 ];
             }
-
         }
         return $arr;
-
     }
 
     public static function getFlag($language){
@@ -106,7 +131,6 @@ class Helper
         if (empty($array)) {
             return [];
         }
-
         $str = '';
         foreach ($array as $key => $value) {
             // Проверяем наличие ожидаемых ключей в массиве
@@ -114,7 +138,6 @@ class Helper
                 $str .= $value['name'] . '////' . $value['id'] . "\r\n";
             }
         }
-
         // Переводим строку
         $transStr = $translete->translate($str);
         $transStr = explode("\r\n", $transStr);
@@ -135,7 +158,6 @@ class Helper
         }
         return $res;
     }
-
 
     public static function translateData($data, $translate,$language,$translateKeys = false)
     {
@@ -178,7 +200,6 @@ class Helper
         return $res;
     }
 
-
     public static function arrayToString($array) {
         $pairs = [];
         foreach ($array as $key => $value) {
@@ -199,8 +220,6 @@ class Helper
         // Собираем все пары ключ=значение в одну строку, разделенную символом "&"
         return implode('&', $pairs);
     }
-
-
 
     public static function stringToArray($string) {
         if (!is_string($string)) {
@@ -228,5 +247,4 @@ class Helper
         }
         return $array;
     }
-
 }

@@ -102,8 +102,17 @@ class ArbeitsTelegramBot
     {
         $this->telegram->deleteWebhook();
         $this->listen();
+
         while (true) {
-            $this->telegram->run();
+            try {
+                $this->telegram->run();
+            } catch (\Exception $e) {
+                // Обработка ошибки (например, вывод в логи или другие действия)
+                error_log('Telegram error: ' . $e->getMessage());
+
+                // Ждем некоторое время перед повторной попыткой
+                sleep(10);
+            }
         }
     }
 }

@@ -358,9 +358,10 @@ class ArbeitsBotMenu
             $workplace = $ad['workplace'];
             $workplaceName = $ad['workplaceName'];
             $positions = $ad['positions'];
-
+            $dateTime = new \DateTime($publishedDate);
+            $publishedDate = $dateTime->format("d F Y, H:i:s");
             $additionalInfo =
-                "<b>" . $tramslateText['title'] . "</b> " . $title . "\n" .
+//                "<b>" . $tramslateText['title'] . "</b> " . $title . "\n" .
                 "<b>" . $tramslateText['publishedDate'] . "</b> " . $publishedDate . "\n" .
                 "<b>" . $tramslateText['occupation'] . "</b> " . $occupation . "\n" .
                 "<b>" . $tramslateText['workplace'] . "</b> " . $workplace . "\n" .
@@ -402,7 +403,7 @@ class ArbeitsBotMenu
         $resource = $this->db->getResourceChoices($this->telegram->chatId());
         $language = $this->db->getLanguageChoices($this->telegram->chatId());
         $key_board = $param['detail_id'];
-        $tramslateText = $this->settingArray->arrSettingLanguage['sv'];
+        $tramslateText = $this->settingArray->arrSettingLanguage[$language];
 
         $ad = $this->apiArbeits->getOne($key_board, $resource);
 
@@ -415,12 +416,9 @@ class ArbeitsBotMenu
         }
 
         if ($translate) {
-
             $str = $this->apiTranslate->translate($str, $language, false);
             $str = strip_tags($str);
-
             $str1 = explode("\n",$str);
-
             $str = '';
             foreach ($str1 as $item){
                 $str2 = explode(':^',$item);
