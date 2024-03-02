@@ -347,8 +347,9 @@ class ArbeitsBotMenu
 
     public function buildMenuFromAds($ads)
     {
-        $tramslateText = $this->settingArray->arrSettingbuildMenuFromAds['sv'];
         $language = $this->db->getLanguageChoices($this->telegram->chatId());
+        $tramslateText = $this->settingArray->arrSettingbuildMenuFromAds[$language];
+
         foreach ($ads['ads'] as $ad) {
 
             $title = $ad['title'];
@@ -359,6 +360,7 @@ class ArbeitsBotMenu
             $positions = $ad['positions'];
 
             $additionalInfo =
+                "<b>" . $tramslateText['title'] . "</b> " . $title . "\n" .
                 "<b>" . $tramslateText['publishedDate'] . "</b> " . $publishedDate . "\n" .
                 "<b>" . $tramslateText['occupation'] . "</b> " . $occupation . "\n" .
                 "<b>" . $tramslateText['workplace'] . "</b> " . $workplace . "\n" .
@@ -413,6 +415,7 @@ class ArbeitsBotMenu
         }
 
         if ($translate) {
+
             $str = $this->apiTranslate->translate($str, $language, false);
             $str = strip_tags($str);
 

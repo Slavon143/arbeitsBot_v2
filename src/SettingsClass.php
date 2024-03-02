@@ -126,6 +126,7 @@ class SettingsClass
     ];
     public $arrSettingbuildMenuFromAds = [
         'uk' => [
+            'title' => 'Назва:',
             'publishedDate' => 'Дата публікації:',
             'occupation' => 'Професія:',
             'workplace' => 'Місце роботи:',
@@ -135,6 +136,7 @@ class SettingsClass
             'Hide' => 'Приховати',
         ],
         'ru'=>[
+            'title' => 'Заголовок:',
             'publishedDate' => 'Дата публикации:',
             'occupation' => 'Профессия:',
             'workplace' => 'Место работы:',
@@ -144,6 +146,7 @@ class SettingsClass
             'Hide' => 'Скрыть',
         ],
         'en'=>[
+            'title' => 'Title:',
             'publishedDate' => 'Publication date:',
             'occupation' => 'Profession:',
             'workplace' => 'Place of work:',
