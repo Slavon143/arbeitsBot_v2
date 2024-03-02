@@ -55,7 +55,7 @@ class ArbeitsBotMenu
         }
         $language = $this->db->getLanguageChoices($this->telegram->chatId());
         $tramslateText = $this->settingArray->arrSettingStartMenuRegion[$language];
-        $getLocation = $this->apiArbeits->getLocation();
+        $getLocation = $this->settingArray->location;
 
         $buttons = [];
 
@@ -90,7 +90,7 @@ class ArbeitsBotMenu
         $language = $this->db->getLanguageChoices($this->telegram->chatId());
         $region_id = $param['r_id'];
         $tramslateText = $this->settingArray->arrSettingStartMenuCity[$language];
-        $getLocation = $this->apiArbeits->getLocation();
+        $getLocation = $this->settingArray->location;
         $buttons = [];
         // Разбиваем кнопки на два ряда
         $columns = 3;
@@ -141,7 +141,8 @@ class ArbeitsBotMenu
 
         $tramslateText = $this->settingArray->arrSettingStartMenuOccupation[$language];
 
-        $occupation = $this->apiArbeits->getOccupation();
+        $occupation = $this->settingArray->occupation;
+
         if (isset($param['trans'])) {
             $translateApi = new TranslateApi();
             $occupation = Helper::translateData($occupation, $translateApi, $param['trans'], false);
@@ -204,7 +205,7 @@ class ArbeitsBotMenu
 
         $tramslateText = $this->settingArray->arrSettingStartMenuSpecialist[$language];
 
-        $occupation = $this->apiArbeits->getOccupation();
+        $occupation = $this->settingArray->occupation;
 
         $buttons = [];
         $columns = 2;
