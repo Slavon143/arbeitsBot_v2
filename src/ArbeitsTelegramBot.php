@@ -15,7 +15,6 @@ class ArbeitsTelegramBot
     protected $logger;
     protected $settingArray;
     protected $db;
-    protected $language;
 
     public function __construct()
     {
@@ -104,15 +103,7 @@ class ArbeitsTelegramBot
         $this->telegram->deleteWebhook();
         $this->listen();
         while (true) {
-            try {
-                $this->telegram->run();
-            } catch (\Exception $e) {
-                $errorMessage = 'Произошла другая ошибка: ' . $e->getMessage();
-                echo $errorMessage . PHP_EOL;
-                $this->logger->log($errorMessage);
-                $this->menu->sendMeMessage($errorMessage);
-                sleep(10);
-            }
+            $this->telegram->run();
         }
     }
 }
