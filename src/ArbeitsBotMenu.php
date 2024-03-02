@@ -414,8 +414,19 @@ class ArbeitsBotMenu
         if ($translate) {
             $str = $this->apiTranslate->translate($str, $language, false);
             $str = strip_tags($str);
-        }
 
+            $str1 = explode("\n",$str);
+
+            $str = '';
+            foreach ($str1 as $item){
+                $str2 = explode(':^',$item);
+
+                if (isset($str2[0]) && isset($str2[1])){
+                    $str .= '<b>' . $str2[0] . '</b>: ' . $str2[1] ."\n";
+                }
+            }
+        }
+        $str = str_replace(":^",': ',$str);
         $flag_unicode = Helper::getFlag($language);
         $menu = [];
         if (!$translate) {

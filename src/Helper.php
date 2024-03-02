@@ -47,14 +47,14 @@ class Helper
         $rename = Helper::renameKeys($flattenedArray, $newArray);
         $str = '';
         foreach ($rename as $key => $item) {
-            $str .= '<b>' . $key . '</b>' . ': ' . $item . "\n";
+            $str .= '<b>' . $key . '</b>' . ':^' . $item . "\n";
         }
         return $str;
     }
 
     public static function debug($data)
     {
-        file_put_contents(__DIR__ . '/classDebug.txt', var_export($data, 1));
+        file_put_contents(__DIR__ . '/classDebug.txt', var_export($data, 1)."\n\r",FILE_APPEND);
     }
 
     public static function specialistDataTranslate($arr, $occupation_id, $translete)
